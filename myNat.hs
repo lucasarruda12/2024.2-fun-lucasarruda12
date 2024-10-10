@@ -1,7 +1,7 @@
-import Prelude hiding ( Num(..), min, max )
+import Prelude hiding ( Num(..), min, max, quot )
 
 data Nat = O | S Nat
-    deriving ( Show )
+    deriving ( Show, Eq )
 
 (+) :: Nat -> Nat -> Nat
 n + O     = n
@@ -23,11 +23,25 @@ fib (S (S n)) = fib (S n) + fib n
 min :: (Nat, Nat) -> Nat
 min (n, O)         = O
 min (O, n)         = O
-min ((S n), (S m)) = min (n, m)
+min ((S n), (S m)) = S (min (n, m))
 
 max :: (Nat, Nat) -> Nat
 max (n, O)         = n
 max (O, n)         = n
-max ((S n), (S m)) = max (n, m)
+max ((S n), (S m)) = S (max (n, m))
 
-
+-- monos :: Nat -> Nat -> Nat
+-- monos O n = O
+-- monos n O = n
+-- monos (S n) (S m) = monos n m
+-- 
+-- (-) :: Nat -> Nat -> Nat
+-- (-) = monos
+-- 
+-- quot :: (Nat, Nat) -> Nat
+-- quot (_, O) = error "Division by O"
+-- quot (n, m)
+    -- | menor == n = O 
+    -- | otherwise  = S (quot (n - m, m))
+    -- where menor = min (n, m)
+-- 

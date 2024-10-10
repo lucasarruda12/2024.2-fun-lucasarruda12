@@ -1,4 +1,4 @@
-import Prelude hiding ( Num(..), min, max, quot )
+import Prelude hiding ( Num(..), min, max, quot, pred )
 
 data Nat = O | S Nat
     deriving ( Show, Eq )
@@ -10,6 +10,13 @@ n + (S m) = S (n + m)
 (*) :: Nat -> Nat -> Nat
 n * O     = O
 n * (S m) = n + (n * m)
+
+double :: Nat -> Nat
+double = (*) ( S $ S $ O )
+
+pred :: Nat -> Nat
+pred O     = O
+pred (S n) = n
 
 fact :: Nat -> Nat
 fact O = S O
@@ -29,19 +36,3 @@ max :: (Nat, Nat) -> Nat
 max (n, O)         = n
 max (O, n)         = n
 max ((S n), (S m)) = S (max (n, m))
-
--- monos :: Nat -> Nat -> Nat
--- monos O n = O
--- monos n O = n
--- monos (S n) (S m) = monos n m
--- 
--- (-) :: Nat -> Nat -> Nat
--- (-) = monos
--- 
--- quot :: (Nat, Nat) -> Nat
--- quot (_, O) = error "Division by O"
--- quot (n, m)
-    -- | menor == n = O 
-    -- | otherwise  = S (quot (n - m, m))
-    -- where menor = min (n, m)
--- 

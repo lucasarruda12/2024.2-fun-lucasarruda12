@@ -56,3 +56,9 @@ div (n, m)
     | n < m     = (O, n)
     | otherwise = (S (fst w), snd w)  
     where w = div (n - m, m) 
+
+quot :: (Nat, Nat) -> Nat
+quot = fst . div
+
+rem :: (Nat, Nat) -> Nat
+rem = snd . div

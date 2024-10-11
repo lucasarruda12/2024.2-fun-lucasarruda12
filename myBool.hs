@@ -1,14 +1,16 @@
 import Prelude hiding ( Bool )
 
-data Bool = True | False
+data Booleano = Verdadeiro | Falso
     deriving ( Eq, Show )
 
-data myThen a = then a
+data Entao a = Entao a
     deriving ( Eq, Show )
 
-data Else a = else a
+data Senao a = Senao a
     deriving ( Eq, Show )
 
-If :: Bool -> Then a -> Else a -> a 
-If True (then a) _        = a
-If False _       (else a) = a
+lucas_é_bonito = Verdadeiro
+
+se :: Booleano -> Entao a -> Senao a -> a
+se Verdadeiro (Entao a) _         = a
+se Falso      _         (Senao b) = b

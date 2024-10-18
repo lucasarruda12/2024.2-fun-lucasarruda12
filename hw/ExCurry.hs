@@ -6,11 +6,11 @@ import Prelude hiding ( curry , uncurry )
 
 -- curry gets a "traditional" binary function
 -- and returns its currified version
-curry :: undefined
-curry = undefined
+curry :: ((a, b) -> c) -> a -> b -> c
+curry f = \x -> \y -> f (x, y)
 
 -- uncurry gets a currified function
 -- and returns its "traditional" binary version
-uncurry :: undefined
-uncurry = undefined
+uncurry :: (a -> b -> c) -> (a,b) -> c
+uncurry f = \(x,y) -> f x y
 

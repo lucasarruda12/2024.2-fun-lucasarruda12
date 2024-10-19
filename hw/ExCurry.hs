@@ -7,7 +7,7 @@ import Prelude hiding ( curry , uncurry )
 -- curry gets a "traditional" binary function
 -- and returns its currified version
 curry :: ((a, b) -> c) -> a -> b -> c
-curry f = \x -> \y -> f (x, y)
+curry f = \x \y -> f (x, y)
 
 -- uncurry gets a currified function
 -- and returns its "traditional" binary version

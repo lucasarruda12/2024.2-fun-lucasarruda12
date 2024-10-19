@@ -5,7 +5,12 @@ import Prelude hiding ( exp )
 -- Nat datatype --------------------------------
 
 data Nat = O | S Nat
-     deriving (Eq, Show)
+     -- deriving (Eq, Show)
+    deriving (Eq)
+
+instance (Show Nat) where
+  show O = "O"
+  show (S n) = "S" ++ show n
 
 instance (Num Nat) where
     (+) = add
@@ -55,5 +60,9 @@ exp = hyper undefined
 -- (..?..), add, mul, exp, ...?
 
 hyper :: Integral i => i -> (Nat -> Nat -> Nat)
-hyper = undefined
-
+hyper 0 = \x -> \y -> case (x, y) of
+  (x, O)      -> x
+  (x, (S y')) -> S ((hyper 0) x y')
+hyper n = \x -> \y -> case (x, y) of
+  (x, (S O))  -> S ((hyper (n - 1)) x O)
+  (x, (S y')) -> (hyper (n - 1)) x ((hyper n) x y')

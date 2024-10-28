@@ -1,7 +1,10 @@
-import Prelude hiding ( Num(..), min, max, quot, pred, (<), div )
+import Prelude ( Show )
 
 data Nat = O | S Nat
-    deriving ( Show, Eq )
+
+instance Show Nat where
+  show O      = "O"
+  show (S n)  = "S" ++ show n
 
 (+) :: Nat -> Nat -> Nat
 n + O     = n

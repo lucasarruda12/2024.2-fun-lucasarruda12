@@ -56,15 +56,11 @@ instance Ord Nat where
 
     min O _ = O
     min _ O = O
-    min (S n) (S m)
-      | n <= m    = S n
-      | otherwise = S m
+    min (S n) (S m) = S (min n m)
 
     max O n = n
     max n O = n
-    max (S n) (S m)
-      | n <= m    = S m
-      | otherwise = S n
+    max (S n) (S m) = S (min n m)
 
 
 ----------------------------------------------------------------

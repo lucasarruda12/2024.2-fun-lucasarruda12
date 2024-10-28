@@ -1,7 +1,22 @@
+import Prelude
+    ( Show(..)
+    , Eq(..)
+    , Ord(..)
+    , Num(..)
+    , Integral(..)
+    , Bool(..) , not , (&&) , (||)
+    , (++)
+    , ($)
+    , (.)
+    , undefined
+    , error
+    , otherwise
+    )
 import ExNat
 
-data Int = MkInt Nat Nat
+data Int = Int Nat Nat
   deriving (Show)
 
 instance Eq Int where
-  (MkInt n n') == (MkInt m m') = n + m' == n' + m
+  (Int n n') == (Int m m') = n + m' == n' + m
+

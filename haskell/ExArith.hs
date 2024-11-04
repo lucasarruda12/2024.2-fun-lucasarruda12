@@ -31,11 +31,11 @@ eval (Neg s)    = - (eval s)
 step :: ArEx -> ArEx
 step (Plus s t) = case (s, t) of
                   (Atom x, Atom y) -> Atom (x + y)
-                  (Atom _, t     ) -> step t
-                  (s     , _     ) -> step s
+                  (Atom _, t     ) -> Plus s (step t)
+                  (s     , _     ) -> Plus (step s) t
 step (Times s t) = case (s, t) of
                   (Atom x, Atom y) -> Atom (x * y)
-                  (Atom _, t     ) -> step t
-                  (s     , _     ) -> step s
-step (Neg (Atom x)) = Neg (-x)
+                  (Atom _, t     ) -> Times s (step t)
+                  (s     , _     ) -> Times (step s) t
+step (Neg (Atom x)) = Atom (-x)
 step (Neg s)        = step s

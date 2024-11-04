@@ -5,7 +5,10 @@ module ExArithV where
 -- decide how to represent Assignments:
 type Assignment = ()
 
-data ArExV
+data ArExV = Atom Integer
+           | Plus ArExV ArExV
+           | Times ArExV ArExV
+           | Neg ArExV
 
 -- pretty printer
 pretty :: ArExV -> String

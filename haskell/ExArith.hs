@@ -29,7 +29,13 @@ eval (Neg s)    = - (eval s)
 
 -- step should make only 1 step of calculation on a given ArEx
 step :: ArEx -> ArEx
-step (Plus (Atom x) (Atom y))   = Atom (x + y)
-step (Times (Atom x) (Atom y))  = Atom (x * y)
-step (Neg (Atom x))             = Atom (- x)
-step a                          = a
+step (Plus s t) = case (s, t) of
+                  (Atom x, Atom y) -> Atom (x + y)
+                  (Atom _, t     ) -> step t
+                  (s     , _     ) -> step s
+step (Times s t) = case (s, t) of
+                  (Atom x, Atom y) -> Atom (x * y)
+                  (Atom _, t     ) -> step t
+                  (s     , _     ) -> step s
+step (Neg (Atom x)) = Neg (-x)
+step (Neg s)        = step s

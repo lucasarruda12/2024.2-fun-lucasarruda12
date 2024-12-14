@@ -120,15 +120,15 @@ liftA :: Applicative f => (a -> b) -> f a -> f b
 liftA f = (<*>) (pure f)
 
 liftA2 :: Applicative f => (a -> b -> c) -> f a -> f b -> f c
-liftA2 f fa = (<*>) (pure f <*> fa)
+liftA2 f fa fb = (pure f <*> fa) <*> fb
 
 -- sequence actions, discarding the value of the first argument
 (*>) :: Applicative f => f a -> f b -> f b
-(*>) = undefined
+(*>) = liftA2 (\x -> \y -> y) -- type checka, ok. Mas oqq tá acontecendo aqui, jesus?
 
 -- sequence actions, discarding the value of the second argument
 (<*) :: Applicative f => f a -> f b -> f a
-(<*) = undefined
+(<*) = liftA2 (\x -> \y -> x)
 
 -- A variant of (<*>) with the types of the arguments reversed.
 -- It differs from flip (<*>) in that the effects are resolved
@@ -152,8 +152,9 @@ infixl 4 <*>, *>, <*, <**>
 
 -- Maybe
 instance Applicative Maybe where
-    pure = undefined
-    (<*>) = undefined
+    pure = Just
+    (<*>) (Just f) (Just a) = Just (f a)
+    (<*>) _         _       = Nothing
 
 -- Lists with ambiguous computational aspect (non-determinism):
 -- Create an isomorphic copy of the type List a, called Ambiguous a
@@ -180,7 +181,8 @@ instance Show a => Show (Temporal a) where
   show (Temporal xs) = "→" <> show xs
 
 instance Functor Temporal where
-    fmap = undefined
+    fmap f (Temporal []) = Temporal []
+    fmap f (Temporal (x:xs)) = Temporal (f x : (fmap f xs))
 
 instance Applicative Temporal where
     pure = undefined
@@ -188,21 +190,28 @@ instance Applicative Temporal where
 
 -- IO
 instance Applicative IO where
-    pure = undefined
-    (<*>) = undefined
+    pure = pure
+    (<*>) iof ioa = do
+      f <- iof
+      a <- ioa
+      pure $ f a
 
 -- (m ×)
 instance Monoid m => Applicative ((,) m) where
-    pure = undefined
-    (<*>) = undefined
+    pure = (,) mempty
+    (<*>) (m, f) (m', a) = (m `mappend` m', f a)
 
 -- (s +)
 instance Semigroup s => Applicative (Either s) where
-    pure = undefined
-    (<*>) = undefined
+    pure = Right
+    (<*>) (Left s) (Right _) = Left s
+    (<*>) (Left s) (Left s') = Left (s <> s)
+    (<*>) (Right f) (Left s) = Left s
+    (<*>) (Right f) (Right a) = Right (f a)
+
 
 -- (r →)
 instance Applicative ((->) r) where
-    pure = undefined
-    (<*>) = undefined
+    pure = \x -> \y -> x
+    (<*>) = \frab -> \fra -> \r -> (frab r) (fra r)
 

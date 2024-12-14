@@ -13,6 +13,7 @@ import Prelude
 import qualified Prelude   as P
 import qualified Data.List as L
 import qualified Data.Char as C
+import ExNat
 
 {- import qualified ... as ... ?
 
@@ -114,17 +115,41 @@ infixl 5 +++
 -- minimum :: Ord a => [a] -> a
 -- maximum :: Ord a => [a] -> a
 
--- take
--- drop
+take :: Nat -> [a] -> [a]
+take (S n) (x : xs) = x : (take n xs)
+take _     _        = []
+ 
+drop :: Nat -> [a] -> [a]
+drop (S n) (x : xs) = (drop n xs)
+drop O      xs      = xs
+drop _     _        = []
 
--- takeWhile
--- dropWhile
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile f [] = []
+takeWhile f (x : xs) 
+  | f x = x : (takeWhile f xs)
+  | otherwise = []
 
--- tails
--- init
--- inits
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile f [] = []
+dropWhile f xs@(x : xs')
+  | f x = dropWhile f xs'
+  | otherwise = xs
 
--- subsequences
+tails :: [a] -> [[a]]
+tails [] = []
+tails (x : xs) = xs : (tails xs)
+
+init :: [a] -> [a]
+init [] = error "boom!"
+init [x] = []
+init (x : xs) = x : (init xs)
+
+inits :: [a] -> [[a]]
+inits [] = []
+inits xs@(_ : xs') = init xs : inits xs'
+
+-- subsequences :: [a] -> [[a]]
 
 -- any
 -- all
@@ -173,7 +198,7 @@ infixl 5 +++
 
 -- checks if the letters of a phrase form a palindrome (see below for examples)
 palindrome :: String -> Bool
-palindrome = undefined
+palindrome x = x == reverse x
 
 {-
 

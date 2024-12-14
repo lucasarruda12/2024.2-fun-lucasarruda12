@@ -38,4 +38,5 @@ step (Times s t) = case (s, t) of
                   (Atom _, t     ) -> Times s (step t)
                   (s     , _     ) -> Times (step s) t
 step (Neg (Atom x)) = Atom (-x)
-step (Neg s)        = step s
+step (Neg s)        = Neg (step s)
+step (Atom x)       = Atom x

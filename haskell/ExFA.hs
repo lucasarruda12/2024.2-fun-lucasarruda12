@@ -134,16 +134,18 @@ liftA2 f fa fb = (pure f <*> fa) <*> fb
 -- It differs from flip (<*>) in that the effects are resolved
 -- in the order the arguments are presented.
 (<**>) :: Applicative f => f a -> f (a -> b) -> f b
-(<**>) = undefined
+(<**>) = liftA2 (\x -> \f -> f x)
 
 when :: Applicative f => Bool -> f () -> f ()
-when = undefined
+when True f = f
+when False f = pure () 
 
 unless :: Applicative f => Bool -> f () -> f ()
-unless = undefined
+unless = when . not
 
 sequenceAL :: Applicative f => [f a] -> f [a]
-sequenceAL = undefined
+sequenceAL []       = pure []
+sequenceAL (x : xs) = x *> (sequenceAL xs)
 
 -- syntactic associativity and precedence
 infixl 4 <*>, *>, <*, <**>

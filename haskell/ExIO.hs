@@ -44,7 +44,7 @@ pause = do
     pure ()
 
 skip :: IO ()
-skip = undefined
+skip = pure ()
 
 newline :: IO ()
 newline = do
@@ -53,12 +53,19 @@ newline = do
 
 -- define it as a foldr
 putStr :: String -> IO ()
-putStr = undefined
+putStr "" = putChar ' ' 
+putStr (x : xs) = do
+  putChar x
+  putStr xs 
 
 -- transform f into one "just like f" except that it prints a newline
 -- after any side-effects f may had
 lnize :: (a -> IO b) -> a -> IO b
-lnize f = undefined
+lnize f a = do
+  b <- f a 
+  putChar '\n'
+  pure b
+   
 
 putStrLn :: String -> IO ()
 putStrLn = lnize putStr
@@ -68,7 +75,9 @@ putCharLn = lnize putChar
 
 -- reads the entire user input as a single string, transforms it, and prints it
 interact :: (String -> String) -> IO ()
-interact = undefined
+interact f = do
+  l <- getLine 
+  putStr (f l) 
 
 perlineize :: (String -> String) -> (String -> String)
 perlineize f = unlines . map f . lines
@@ -170,6 +179,4 @@ foldlIO = undefined
 
 foldlIO_ :: (b -> a -> IO b) -> b -> [a] -> IO ()
 foldlIO_ = undefined
-
-
 
